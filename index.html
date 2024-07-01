@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Futuristic Weather Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+</head>
+<body class="theme-neon">
+    <div class="dashboard">
+        <header>
+            <h1>Weather Nexus</h1>
+            <div class="settings-panel">
+                <select id="themeSelect" class="futuristic-select">
+                    <option value="neon">Neon Theme</option>
+                    <option value="cyberpunk">Cyberpunk Theme</option>
+                    <option value="minimal">Minimal Theme</option>
+                    <option value="retro">Retro Theme</option>
+                    <option value="holographic">Holographic Theme</option>
+                </select>
+                <select id="citySelect" class="futuristic-select">
+                    <option value="myLocation">Use My Location</option>
+                    <option value="52.52,13.41">Berlin, Germany</option>
+                    <option value="48.85,2.35">Paris, France</option>
+                    <option value="51.51,-0.13">London, UK</option>
+                    <option value="40.71,-74.01">New York, USA</option>
+                    <option value="35.68,139.69">Tokyo, Japan</option>
+                    <option value="-26.20,28.05">Johannesburg, South Africa</option>
+                    <option value="-33.92,18.42">Cape Town, South Africa</option>
+                    <option value="55.75,37.62">Moscow, Russia</option>
+                    <option value="-22.91,-43.17">Rio de Janeiro, Brazil</option>
+                    <option value="28.61,77.21">New Delhi, India</option>
+                </select>
+                <select id="unitSelect" class="futuristic-select">
+                    <option value="metric">Metric (°C, km/h)</option>
+                    <option value="imperial">Imperial (°F, mph)</option>
+                </select>
+            </div>
+        </header>
+        <main>
+            <section class="current-weather panel">
+                <h2>Current Conditions</h2>
+                <div class="weather-display">
+                    <div class="temperature" id="currentTemp"></div>
+                    <div class="weather-icon" id="weatherIcon"></div>
+                    <div class="weather-description" id="weatherDescription"></div>
+                </div>
+                <div class="details" id="weatherDetails"></div>
+                <div id="dateTime"></div>
+            </section>
+            <section class="forecast panel">
+                <h2>7-Day Forecast</h2>
+                <div class="forecast-container" id="forecast"></div>
+            </section>
+            <section class="chart panel">
+                <h2>Weather Trends</h2>
+                <div class="tabs">
+                    <button class="tab active" data-tab="temperature">Temperature</button>
+                    <button class="tab" data-tab="precipitation">Precipitation</button>
+                    <button class="tab" data-tab="wind">Wind</button>
+                </div>
+                <div class="chart-container">
+                    <canvas id="weatherChart"></canvas>
+                </div>
+            </section>
+            <section class="advanced-metrics panel">
+                <h2>Advanced Metrics</h2>
+                <div class="metrics-grid" id="advancedMetrics"></div>
+            </section>
+        </main>
+    </div>
+    <div id="forecastModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2 id="modalDate"></h2>
+            <div id="modalContent"></div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,245 @@
+:root {
+    --primary-color: #00ffff;
+    --secondary-color: #ff00ff;
+    --background-color: #000000;
+    --text-color: #ffffff;
+    --panel-background: rgba(255, 255, 255, 0.1);
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    margin: 0;
+    padding: 0;
+    transition: all 0.3s ease;
+}
+
+.dashboard {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+h1, h2 {
+    font-family: 'Orbitron', sans-serif;
+    margin: 0;
+}
+
+.settings-panel {
+    display: flex;
+    gap: 10px;
+}
+
+.futuristic-select {
+    background-color: var(--panel-background);
+    color: var(--text-color);
+    border: 1px solid var(--primary-color);
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-family: 'Orbitron', sans-serif;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.futuristic-select:hover {
+    background-color: var(--primary-color);
+    color: var(--background-color);
+}
+
+main {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.panel {
+    background-color: var(--panel-background);
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 0 10px var(--primary-color);
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.panel:hover {
+    transform: scale(1.02);
+}
+
+.current-weather .weather-display {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.temperature {
+    font-size: 4rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.weather-icon {
+    font-size: 3rem;
+    margin-bottom: 10px;
+}
+
+.forecast-container {
+    display: flex;
+    justify-content: space-between;
+    overflow-x: auto;
+}
+
+.forecast-day {
+    text-align: center;
+    padding: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.forecast-day:hover {
+    background-color: var(--primary-color);
+    color: var(--background-color);
+    border-radius: 5px;
+}
+
+.tabs {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 20px;
+}
+
+.tab {
+    background-color: transparent;
+    border: none;
+    color: var(--text-color);
+    cursor: pointer;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1rem;
+    padding: 5px 10px;
+    transition: all 0.3s ease;
+}
+
+.tab.active {
+    border-bottom: 2px solid var(--primary-color);
+}
+
+.chart-container {
+    height: 300px;
+}
+
+.metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 20px;
+}
+
+.metric {
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.metric:hover {
+    transform: scale(1.1);
+}
+
+.metric-value {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.metric-label {
+    font-size: 0.9rem;
+    color: var(--secondary-color);
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.4);
+}
+
+.modal-content {
+    background-color: var(--panel-background);
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid var(--primary-color);
+    width: 80%;
+    max-width: 600px;
+    border-radius: 10px;
+    animation: modalFadeIn 0.3s;
+}
+
+@keyframes modalFadeIn {
+    from {opacity: 0;}
+    to {opacity: 1;}
+}
+
+.close {
+    color: var(--text-color);
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: var(--primary-color);
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* Themes */
+.theme-neon {
+    --primary-color: #00ffff;
+    --secondary-color: #ff00ff;
+    --background-color: #000000;
+    --text-color: #ffffff;
+    --panel-background: rgba(255, 255, 255, 0.1);
+}
+
+.theme-cyberpunk {
+    --primary-color: #ffd700;
+    --secondary-color: #00ff00;
+    --background-color: #1a1a2e;
+    --text-color: #e94560;
+    --panel-background: rgba(255, 255, 255, 0.05);
+}
+
+.theme-minimal {
+    --primary-color: #333333;
+    --secondary-color: #666666;
+    --background-color: #ffffff;
+    --text-color: #000000;
+    --panel-background: #f0f0f0;
+}
+
+.theme-retro {
+    --primary-color: #33ff33;
+    --secondary-color: #ff3333;
+    --background-color: #000033;
+    --text-color: #33ff33;
+    --panel-background: rgba(51, 255, 51, 0.1);
+}
+
+.theme-holographic {
+    --primary-color: #ff00ff;
+    --secondary-color: #00ffff;
+    --background-color: #000000;
+    --text-color: #ffffff;
+    --panel-background: rgba(255, 0, 255, 0.2);
+}
