@@ -3,16 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Futuristic Weather Dashboard</title>
+    <title>Advanced Weather Nexus</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.33/moment-timezone-with-data.min.js"></script>
 </head>
 <body class="theme-neon">
     <div class="dashboard">
         <header>
-            <h1>Weather Nexus</h1>
+            <h1>Weather Nexus Pro</h1>
             <div class="settings-panel">
                 <select id="themeSelect" class="futuristic-select">
                     <option value="neon">Neon Theme</option>
@@ -50,6 +51,7 @@
                 </div>
                 <div class="details" id="weatherDetails"></div>
                 <div id="dateTime"></div>
+                <div id="localTime"></div>
             </section>
             <section class="forecast panel">
                 <h2>7-Day Forecast</h2>
@@ -61,6 +63,7 @@
                     <button class="tab active" data-tab="temperature">Temperature</button>
                     <button class="tab" data-tab="precipitation">Precipitation</button>
                     <button class="tab" data-tab="wind">Wind</button>
+                    <button class="tab" data-tab="humidity">Humidity</button>
                 </div>
                 <div class="chart-container">
                     <canvas id="weatherChart"></canvas>
@@ -69,6 +72,15 @@
             <section class="advanced-metrics panel">
                 <h2>Advanced Metrics</h2>
                 <div class="metrics-grid" id="advancedMetrics"></div>
+            </section>
+            <section class="air-quality panel">
+                <h2>Air Quality Index</h2>
+                <div id="airQualityIndex"></div>
+                <div id="airQualityDescription"></div>
+            </section>
+            <section class="alerts panel">
+                <h2>Weather Alerts</h2>
+                <div id="weatherAlerts"></div>
             </section>
         </main>
     </div>

@@ -6,8 +6,12 @@ const weatherIcon = document.getElementById('weatherIcon');
 const weatherDescription = document.getElementById('weatherDescription');
 const weatherDetails = document.getElementById('weatherDetails');
 const dateTimeElement = document.getElementById('dateTime');
+const localTimeElement = document.getElementById('localTime');
 const forecastContainer = document.getElementById('forecast');
 const advancedMetricsContainer = document.getElementById('advancedMetrics');
+const airQualityIndex = document.getElementById('airQualityIndex');
+const airQualityDescription = document.getElementById('airQualityDescription');
+const weatherAlerts = document.getElementById('weatherAlerts');
 const tabs = document.querySelectorAll('.tab');
 const modal = document.getElementById('forecastModal');
 const modalDate = document.getElementById('modalDate');
@@ -15,6 +19,8 @@ const modalContent = document.getElementById('modalContent');
 const closeModal = document.getElementsByClassName('close')[0];
 let chart;
 let weatherData;
+let airQualityData;
+let alertsData;
 
 themeSelect.addEventListener('change', changeTheme);
 citySelect.addEventListener('change', handleCityChange);
@@ -95,17 +101,25 @@ async function fetchWeatherData(lat, lon) {
     const coordinates = lat && lon ? `${lat},${lon}` : citySelect.value;
     const [latitude, longitude] = coordinates.split(',');
     const units = unitSelect.value;
-    const url = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&hourly=temperature_2m,precipitation_probability,windspeed_10m,relativehumidity_2m,apparent_temperature,uv_index,pressure_msl,visibility,cloudcover&daily=weathercode,temperature_2m_max,temperature_2m_min,sunrise,sunset&current_weather=true&timezone=auto&temperature_unit=${units === 'imperial' ? 'fahrenheit' : 'celsius'}&windspeed_unit=${units === 'imperial' ? 'mph' : 'kmh'}`;
+    const weatherUrl = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&hourly=temperature_2m,precipitation_probability,windspeed_10m,relativehumidity_2m,apparent_temperature,uv_index,pressure_msl,visibility,cloudcover&daily=weathercode,temperature_2m_max,temperature_2m_min,sunrise,sunset&current_weather=true&timezone=auto&temperature_unit=${units === 'imperial' ? 'fahrenheit' : 'celsius'}&windspeed_unit=${units === 'imperial' ? 'mph' : 'kmh'}`;
+    const airQualityUrl = `https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${latitude}&longitude=${longitude}&hourly=pm10,pm2_5,carbon_monoxide,nitrogen_dioxide,sulphur_dioxide,ozone,european_aqi`;
 
     try {
-        const response = await fetch(url);
-        weatherData = await response.json();
+        const [weatherResponse, airQualityResponse] = await Promise.all([
+            fetch(weatherUrl),
+            fetch(airQualityUrl)
+        ]);
+        weatherData = await weatherResponse.json();
+        airQualityData = await airQualityResponse.json();
+        
         displayWeatherInfo();
         updateChart('temperature');
         displayForecast();
         displayAdvancedMetrics();
+        displayAirQuality();
+        fetchWeatherAlerts(latitude, longitude);
     } catch (error) {
-        console.error('Error fetching weather data:', error);
+        console.error('Error fetching data:', error);
         weatherDetails.innerHTML = 'Failed to fetch weather data. Please try again later.';
     }
 }
@@ -122,6 +136,7 @@ function displayWeatherInfo() {
         <p>Wind: ${current.windspeed} ${units === 'imperial' ? 'mph' : 'km/h'}</p>
     `;
     updateDateTime();
+    updateLocalTime();
 }
 
 function updateDateTime() {
@@ -129,31 +144,110 @@ function updateDateTime() {
     dateTimeElement.textContent = now;
 }
 
+function updateLocalTime() {
+    const timezone = weatherData.timezone;
+    const localTime = moment().tz(timezone).format('HH:mm:ss');
+    localTimeElement.textContent = `Local Time: ${localTime}`;
+}
+
 function getWeatherIcon(weatherCode) {
-    if (weatherCode < 3) return '☀️';
-    if (weatherCode < 50) return '☁️';
-    if (weatherCode < 70) return '🌧️';
-    if (weatherCode < 80) return '❄️';
-    return '⛈️';
+    // More detailed weather icon mapping
+    const iconMap = {
+        0: '☀️', // Clear sky
+        1: '🌤️', // Mainly clear
+        2: '⛅', // Partly cloudy
+        3: '☁️', // Overcast
+        45: '🌫️', // Fog
+        48: '🌫️', // Depositing rime fog
+        51: '🌦️', // Light drizzle
+        53: '🌦️', // Moderate drizzle
+        55: '🌧️', // Dense drizzle
+        56: '🌨️', // Light freezing drizzle
+        57: '🌨️', // Dense freezing drizzle
+        61: '🌧️', // Slight rain
+        63: '🌧️', // Moderate rain
+        65: '🌧️', // Heavy rain
+        66: '🌨️', // Light freezing rain
+        67: '🌨️', // Heavy freezing rain
+        71: '🌨️', // Slight snow fall
+        73: '🌨️', // Moderate snow fall
+        75: '❄️', // Heavy snow fall
+        77: '❄️', // Snow grains
+        80: '🌦️', // Slight rain showers
+        81: '🌧️', // Moderate rain showers
+        82: '🌧️', // Violent rain showers
+        85: '🌨️', // Slight snow showers
+        86: '❄️', // Heavy snow showers
+        95: '⛈️', // Thunderstorm
+        96: '⛈️', // Thunderstorm with slight hail
+        99: '⛈️'  // Thunderstorm with heavy hail
+    };
+    return iconMap[weatherCode] || '❓';
 }
 
 function getWeatherDescription(weatherCode) {
-    if (weatherCode < 3) return 'Clear sky';
-    if (weatherCode < 50) return 'Partly cloudy';
-    if (weatherCode < 70) return 'Rainy';
-    if (weatherCode < 80) return 'Snowy';
-    return 'Thunderstorms';
+    const descriptions = {
+        0: 'Clear sky',
+        1: 'Mainly clear',
+        2: 'Partly cloudy',
+        3: 'Overcast',
+        45: 'Fog',
+        48: 'Depositing rime fog',
+        51: 'Light drizzle',
+        53: 'Moderate drizzle',
+        55: 'Dense drizzle',
+        56: 'Light freezing drizzle',
+        57: 'Dense freezing drizzle',
+        61: 'Slight rain',
+        63: 'Moderate rain',
+        65: 'Heavy rain',
+        66: 'Light freezing rain',
+        67: 'Heavy freezing rain',
+        71: 'Slight snow fall',
+        73: 'Moderate snow fall',
+        75: 'Heavy snow fall',
+        77: 'Snow grains',
+        80: 'Slight rain showers',
+        81: 'Moderate rain showers',
+        82: 'Violent rain showers',
+        85: 'Slight snow showers',
+        86: 'Heavy snow showers',
+        95: 'Thunderstorm',
+        96: 'Thunderstorm with slight hail',
+        99: 'Thunderstorm with heavy hail'
+    };
+    return descriptions[weatherCode] || 'Unknown weather condition';
 }
 
 function updateChart(dataType) {
     const ctx = document.getElementById('weatherChart').getContext('2d');
-    const hourlyData = weatherData.hourly[dataType === 'temperature' ? 'temperature_2m' : 
-                        dataType === 'precipitation' ? 'precipitation_probability' : 'windspeed_10m'].slice(0, 24);
+    let hourlyData, label;
+
+    switch(dataType) {
+        case 'temperature':
+            hourlyData = weatherData.hourly.temperature_2m.slice(0, 24);
+            label = 'Temperature';
+            break;
+        case 'precipitation':
+            hourlyData = weatherData.hourly.precipitation_probability.slice(0, 24);
+            label = 'Precipitation Probability';
+            break;
+        case 'wind':
+            hourlyData = weatherData.hourly.windspeed_10m.slice(0, 24);
+            label = 'Wind Speed';
+            break;
+        case 'humidity':
+            hourlyData = weatherData.hourly.relativehumidity_2m.slice(0, 24);
+            label = 'Relative Humidity';
+            break;
+    }
+
     const labels = weatherData.hourly.time.slice(0, 24).map(time => moment(time).format('HH:mm'));
 
     if (chart) {
         chart.data.labels = labels;
         chart.data.datasets[0].data = hourlyData;
+        chart.data.datasets[0].label = label;
         chart.update();
     } else {
         chart = new Chart(ctx, {
@@ -161,7 +255,7 @@ function updateChart(dataType) {
             data: {
                 labels: labels,
                 datasets: [{
-                    label: dataType.charAt(0).toUpperCase() + dataType.slice(1),
+                    label: label,
                     data: hourlyData,
                     borderColor: getComputedStyle(document.body).getPropertyValue('--primary-color'),
                     backgroundColor: getComputedStyle(document.body).getPropertyValue('--secondary-color') + '40',
@@ -173,7 +267,8 @@ function updateChart(dataType) {
                 responsive: true,
                 plugins: {
                     legend: {
-                        display: false
+                        display: true,
+                        position: 'top'
                     }
                 },
                 scales: {
@@ -268,6 +363,59 @@ function displayAdvancedMetrics() {
     `).join('');
 }
 
+function displayAirQuality() {
+    const aqi = airQualityData.hourly.european_aqi[0];
+    airQualityIndex.textContent = aqi;
+    airQualityDescription.textContent = getAirQualityDescription(aqi);
+    airQualityIndex.className = `air-quality-${getAirQualityLevel(aqi)}`;
+}
+
+function getAirQualityDescription(aqi) {
+    if (aqi <= 20) return 'Excellent';
+    if (aqi <= 40) return 'Good';
+    if (aqi <= 60) return 'Moderate';
+    if (aqi <= 80) return 'Poor';
+    if (aqi <= 100) return 'Very Poor';
+    return 'Extremely Poor';
+}
+
+function getAirQualityLevel(aqi) {
+    if (aqi <= 20) return 'excellent';
+    if (aqi <= 40) return 'good';
+    if (aqi <= 60) return 'moderate';
+    if (aqi <= 80) return 'poor';
+    if (aqi <= 100) return 'very-poor';
+    return 'extremely-poor';
+}
+
+async function fetchWeatherAlerts(latitude, longitude) {
+    try {
+        const response = await fetch(`https://api.openweathermap.org/data/3.0/onecall?lat=${latitude}&lon=${longitude}&exclude=current,minutely,hourly,daily&appid=YOUR_OPENWEATHERMAP_API_KEY`);
+        const data = await response.json();
+        alertsData = data.alerts || [];
+        displayWeatherAlerts();
+    } catch (error) {
+        console.error('Error fetching weather alerts:', error);
+        weatherAlerts.innerHTML = 'Failed to fetch weather alerts.';
+    }
+}
+
+function displayWeatherAlerts() {
+    if (alertsData.length === 0) {
+        weatherAlerts.innerHTML = '<p>No active weather alerts.</p>';
+        return;
+    }
+
+    weatherAlerts.innerHTML = alertsData.map(alert => `
+        <div class="alert">
+            <h3>${alert.event}</h3>
+            <p>${alert.description}</p>
+            <p>Start: ${moment(alert.start * 1000).format('MMMM Do YYYY, HH:mm')}</p>
+            <p>End: ${moment(alert.end * 1000).format('MMMM Do YYYY, HH:mm')}</p>
+        </div>
+    `).join('');
+}
+
 function updateChartColors() {
     chart.data.datasets[0].borderColor = getComputedStyle(document.body).getPropertyValue('--primary-color');
     chart.data.datasets[0].backgroundColor = getComputedStyle(document.body).getPropertyValue('--secondary-color') + '40';
@@ -289,3 +437,4 @@ if ("geolocation" in navigator) {
     fetchWeatherData();
 }
 setInterval(updateDateTime, 1000);
+setInterval(updateLocalTime, 1000);

@@ -203,6 +203,37 @@ main {
     cursor: pointer;
 }
 
+#airQualityIndex {
+    font-size: 3rem;
+    font-weight: bold;
+    margin: 10px 0;
+}
+
+#airQualityDescription {
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+}
+
+.air-quality-excellent { color: #00e400; }
+.air-quality-good { color: #92d050; }
+.air-quality-moderate { color: #ffff00; }
+.air-quality-poor { color: #ff9900; }
+.air-quality-very-poor { color: #ff0000; }
+.air-quality-extremely-poor { color: #7e0023; }
+
+.alert {
+    background-color: rgba(255, 0, 0, 0.2);
+    border: 1px solid #ff0000;
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.alert h3 {
+    color: #ff0000;
+    margin-top: 0;
+}
+
 /* Themes */
 .theme-neon {
     --primary-color: #00ffff;
@@ -242,4 +273,92 @@ main {
     --background-color: #000000;
     --text-color: #ffffff;
     --panel-background: rgba(255, 0, 255, 0.2);
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .dashboard {
+        padding: 10px;
+    }
+
+    header {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .settings-panel {
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .futuristic-select {
+        width: 100%;
+    }
+
+    main {
+        grid-template-columns: 1fr;
+    }
+
+    .forecast-container {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .forecast-day {
+        flex: 0 0 calc(33.333% - 10px);
+        margin: 5px;
+    }
+
+    .tabs {
+        flex-wrap: wrap;
+    }
+
+    .tab {
+        flex: 1 0 calc(50% - 10px);
+        margin: 5px;
+    }
+
+    .modal-content {
+        width: 90%;
+    }
+}
+
+/* Animations */
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+.temperature {
+    animation: pulse 2s infinite;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.panel {
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation: none !important;
+        transition: none !important;
+    }
+}
+
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
 }
