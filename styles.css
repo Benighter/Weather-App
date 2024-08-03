@@ -4,6 +4,8 @@
     --background-color: #000000;
     --text-color: #ffffff;
     --panel-background: rgba(255, 255, 255, 0.1);
+    --neumorphism-light: rgba(255, 255, 255, 0.1);
+    --neumorphism-dark: rgba(0, 0, 0, 0.2);
 }
 
 body {
@@ -41,17 +43,19 @@ h1, h2 {
 .futuristic-select {
     background-color: var(--panel-background);
     color: var(--text-color);
-    border: 1px solid var(--primary-color);
-    padding: 5px 10px;
-    border-radius: 5px;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 20px;
     font-family: 'Orbitron', sans-serif;
     cursor: pointer;
     transition: all 0.3s ease;
+    box-shadow: 3px 3px 6px var(--neumorphism-dark),
+                -3px -3px 6px var(--neumorphism-light);
 }
 
 .futuristic-select:hover {
-    background-color: var(--primary-color);
-    color: var(--background-color);
+    box-shadow: inset 2px 2px 5px var(--neumorphism-dark),
+                inset -2px -2px 5px var(--neumorphism-light);
 }
 
 main {
@@ -62,15 +66,18 @@ main {
 
 .panel {
     background-color: var(--panel-background);
-    border-radius: 10px;
+    border-radius: 15px;
     padding: 20px;
-    box-shadow: 0 0 10px var(--primary-color);
+    box-shadow: 5px 5px 10px var(--neumorphism-dark),
+                -5px -5px 10px var(--neumorphism-light);
     text-align: center;
     transition: all 0.3s ease;
 }
 
 .panel:hover {
-    transform: scale(1.02);
+    transform: translateY(-3px);
+    box-shadow: 3px 3px 6px var(--neumorphism-dark),
+                -3px -3px 6px var(--neumorphism-light);
 }
 
 .current-weather .weather-display {
@@ -92,6 +99,7 @@ main {
     margin-bottom: 10px;
 }
 
+/* Forecast Card Styling */
 .forecast-container {
     display: flex;
     justify-content: space-between;
@@ -99,39 +107,41 @@ main {
 }
 
 .forecast-day {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     text-align: center;
-    padding: 10px;
+    padding: 15px;
     cursor: pointer;
     transition: all 0.3s ease;
+    border-radius: 10px;
+    box-shadow: 2px 2px 4px var(--neumorphism-dark),
+                -2px -2px 4px var(--neumorphism-light);
+    min-width: 120px; /* Ensure minimum width for content */
 }
 
 .forecast-day:hover {
-    background-color: var(--primary-color);
-    color: var(--background-color);
-    border-radius: 5px;
+    transform: translateY(-3px);
+    box-shadow: inset 2px 2px 5px var(--neumorphism-dark),
+                inset -2px -2px 5px var(--neumorphism-light);
 }
 
-.tabs {
-    display: flex;
-    justify-content: space-around;
-    margin-bottom: 20px;
+.forecast-day .day {
+    font-weight: bold;
 }
 
-.tab {
-    background-color: transparent;
-    border: none;
-    color: var(--text-color);
-    cursor: pointer;
-    font-family: 'Orbitron', sans-serif;
-    font-size: 1rem;
-    padding: 5px 10px;
-    transition: all 0.3s ease;
+.forecast-day .icon {
+    font-size: 2rem;
+    margin: 5px 0;
 }
 
-.tab.active {
-    border-bottom: 2px solid var(--primary-color);
+.forecast-day .high,
+.forecast-day .low {
+    font-size: 1.2rem;
 }
 
+/* Other Card Styling (Similar Principles) */
 .chart-container {
     height: 300px;
 }
@@ -143,12 +153,22 @@ main {
 }
 
 .metric {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     text-align: center;
     transition: all 0.3s ease;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 2px 2px 4px var(--neumorphism-dark),
+                -2px -2px 4px var(--neumorphism-light);
 }
 
 .metric:hover {
-    transform: scale(1.1);
+    transform: translateY(-3px);
+    box-shadow: inset 2px 2px 5px var(--neumorphism-dark),
+                inset -2px -2px 5px var(--neumorphism-light);
 }
 
 .metric-value {
@@ -160,6 +180,7 @@ main {
     font-size: 0.9rem;
     color: var(--secondary-color);
 }
+
 
 .modal {
     display: none;

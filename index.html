@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Advanced Weather Nexus</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles.css"> 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.33/moment-timezone-with-data.min.js"></script>
@@ -53,10 +53,12 @@
                 <div id="dateTime"></div>
                 <div id="localTime"></div>
             </section>
+
             <section class="forecast panel">
                 <h2>7-Day Forecast</h2>
                 <div class="forecast-container" id="forecast"></div>
             </section>
+
             <section class="chart panel">
                 <h2>Weather Trends</h2>
                 <div class="tabs">
@@ -69,28 +71,33 @@
                     <canvas id="weatherChart"></canvas>
                 </div>
             </section>
+
             <section class="advanced-metrics panel">
                 <h2>Advanced Metrics</h2>
                 <div class="metrics-grid" id="advancedMetrics"></div>
             </section>
+
             <section class="air-quality panel">
                 <h2>Air Quality Index</h2>
                 <div id="airQualityIndex"></div>
                 <div id="airQualityDescription"></div>
             </section>
+
             <section class="alerts panel">
                 <h2>Weather Alerts</h2>
                 <div id="weatherAlerts"></div>
             </section>
         </main>
     </div>
+
     <div id="forecastModal" class="modal">
         <div class="modal-content">
-            <span class="close">&times;</span>
+            <span class="close">×</span>
             <h2 id="modalDate"></h2>
             <div id="modalContent"></div>
         </div>
     </div>
+
     <script src="script.js"></script>
 </body>
 </html>
